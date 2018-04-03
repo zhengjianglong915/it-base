@@ -15,10 +15,13 @@ public class RBTree {
 
         public RBNode(int val) {
             this.value = val;
+            left = nil; // 默认指向空
+            right = nil; // 默认指向空节点
         }
     }
 
-    private RBNode nil;
+    // 空节点
+    private static RBNode nil;
 
     {
         nil = new RBNode(0);
@@ -38,21 +41,21 @@ public class RBTree {
      * @return
      */
     public RBNode leftRotate(RBNode node) {
-        if (null == node) {
-            return null;
+        if (nil == node) {
+            return nil;
         }
 
         RBNode rightNode = node.right;
         node.right = rightNode.left;
 
         // 设置父节点
-        if (rightNode.left != null) {
+        if (rightNode.left != nil) {
             rightNode.left.parent = node;
         }
 
         rightNode.parent = node.parent;
         // 为父节点的父节点设置左右节点
-        if (node.parent == null) {
+        if (node.parent == nil) {
             this.root = rightNode;
         } else if (node.parent.left == node) { // 如果是左节点
             node.parent.left = rightNode;
@@ -72,15 +75,15 @@ public class RBTree {
      * @return
      */
     public RBNode rightRotate(RBNode node) {
-        if (null == node) {
-            return null;
+        if (nil == node) {
+            return nil;
         }
 
         RBNode leftNode = node.left;
         node.left = leftNode.right;
 
         leftNode.parent = node.parent;
-        if (node.parent == null) {
+        if (node.parent == nil) {
             this.root = leftNode;
         } else if (node.parent.left == node) {
             node.parent.left = leftNode;
@@ -102,14 +105,14 @@ public class RBTree {
     public void insert(int val) {
         RBNode z = new RBNode(val);
 
-        RBNode y = null; // 表示要插入节点的父节点
+        RBNode y = nil; // 表示要插入节点的父节点
         RBNode x = root;  // 遍历节点
 
         /**
          * 寻找插入的位置
          */
         // 1. 将红黑树当作一颗二叉查找树，将节点添加到二叉查找树中。
-        while (x != null) {
+        while (x != nil) {
             y = x;
             if (z.value < x.value) {
                 x = x.left;
@@ -122,7 +125,7 @@ public class RBTree {
          * 插入
          */
         z.parent = y;
-        if (y == null) {
+        if (y == nil) {
             root = z;
         } else if (z.value < y.value) {
             y.left = z;
@@ -130,10 +133,9 @@ public class RBTree {
             y.right = z;
         }
 
-        // 默认就是null
-        z.left = null;
-        z.right = null;
-
+        // 指向nil
+        z.left = nil;
+        z.right = nil;
         z.color = RED;
 
         /**
@@ -213,13 +215,13 @@ public class RBTree {
         // 原来的颜色
         RBNode replace;
         boolean color = rmNode.color;
-        if (rmNode.left == null) {
+        if (rmNode.left == nil) {
             // 左孩子不存在
             // 被删节点的后继节点。(称为"取代节点")
             // 用它来取代"被删节点"的位置，然后再将"被删节点"去掉。
             replace = rmNode.right;
             transplant(rmNode, replace);
-        } else if (rmNode.right == null) {
+        } else if (rmNode.right == nil) {
             replace = rmNode.left;
             transplant(rmNode, replace);
         } else {
@@ -339,7 +341,7 @@ public class RBTree {
      * @param replace 被删除位置，新的替换元素
      */
     private void transplant(RBNode parent, RBNode replace) {
-        if (parent.parent == null) {
+        if (parent.parent == nil) {
             root = replace;
         } else if (parent == parent.parent.left) {
             parent.parent.left = replace;
@@ -354,11 +356,11 @@ public class RBTree {
      * @return
      */
     private RBNode min(RBNode root) {
-        if (root == null) {
-            return null;
+        if (root == nil) {
+            return nil;
         }
         RBNode node = root;
-        while (node.left != null) {
+        while (node.left != nil) {
             node = node.left;
         }
         return node;
